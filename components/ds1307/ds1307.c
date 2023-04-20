@@ -26,9 +26,9 @@
  */
 
 /**
- * @file ds1307.c
+ * @file ds1338.c
  *
- * ESP-IDF driver for ds1307 real-time clock
+ * ESP-IDF driver for ds1338 real-time clock
  *
  * Ported from esp-open-rtos
  *
@@ -38,7 +38,7 @@
  */
 #include <esp_err.h>
 #include <esp_idf_lib_helpers.h>
-#include "ds1307.h"
+#include "ds1338.h"
 
 #define I2C_FREQ_HZ 100000
 
@@ -89,7 +89,7 @@ static esp_err_t update_register(i2c_dev_t *dev, uint8_t reg, uint8_t mask, uint
     return res;
 }
 
-esp_err_t ds1307_init_desc(i2c_dev_t *dev, i2c_port_t port, gpio_num_t sda_gpio, gpio_num_t scl_gpio)
+esp_err_t ds1338_init_desc(i2c_dev_t *dev, i2c_port_t port, gpio_num_t sda_gpio, gpio_num_t scl_gpio)
 {
     CHECK_ARG(dev);
 
@@ -104,19 +104,19 @@ esp_err_t ds1307_init_desc(i2c_dev_t *dev, i2c_port_t port, gpio_num_t sda_gpio,
     return i2c_dev_create_mutex(dev);
 }
 
-esp_err_t ds1307_free_desc(i2c_dev_t *dev)
+esp_err_t ds1338_free_desc(i2c_dev_t *dev)
 {
     CHECK_ARG(dev);
 
     return i2c_dev_delete_mutex(dev);
 }
 
-esp_err_t ds1307_start(i2c_dev_t *dev, bool start)
+esp_err_t ds1338_start(i2c_dev_t *dev, bool start)
 {
     return update_register(dev, TIME_REG, CH_MASK, start ? 0 : CH_BIT);
 }
 
-esp_err_t ds1307_is_running(i2c_dev_t *dev, bool *running)
+esp_err_t ds1338_is_running(i2c_dev_t *dev, bool *running)
 {
     CHECK_ARG(dev && running);
 
@@ -131,7 +131,7 @@ esp_err_t ds1307_is_running(i2c_dev_t *dev, bool *running)
     return ESP_OK;
 }
 
-esp_err_t ds1307_get_time(i2c_dev_t *dev,  t_time *time)
+esp_err_t ds1338_get_time(i2c_dev_t *dev,  t_time *time)
 {
     CHECK_ARG(dev && time);
 
@@ -163,7 +163,7 @@ esp_err_t ds1307_get_time(i2c_dev_t *dev,  t_time *time)
     return ESP_OK;
 }
 
-esp_err_t ds1307_set_time(i2c_dev_t *dev, const struct tm *time)
+esp_err_t ds1338_set_time(i2c_dev_t *dev, const struct tm *time)
 {
     CHECK_ARG(dev && time);
 
@@ -184,12 +184,12 @@ esp_err_t ds1307_set_time(i2c_dev_t *dev, const struct tm *time)
     return ESP_OK;
 }
 
-esp_err_t ds1307_enable_squarewave(i2c_dev_t *dev, bool enable)
+esp_err_t ds1338_enable_squarewave(i2c_dev_t *dev, bool enable)
 {
     return update_register(dev, CONTROL_REG, SQWE_MASK, enable ? SQWE_BIT : 0);
 }
 
-esp_err_t ds1307_is_squarewave_enabled(i2c_dev_t *dev, bool *sqw_en)
+esp_err_t ds1338_is_squarewave_enabled(i2c_dev_t *dev, bool *sqw_en)
 {
     CHECK_ARG(dev && sqw_en);
 
@@ -204,12 +204,12 @@ esp_err_t ds1307_is_squarewave_enabled(i2c_dev_t *dev, bool *sqw_en)
     return ESP_OK;
 }
 
-esp_err_t ds1307_set_squarewave_freq(i2c_dev_t *dev, ds1307_squarewave_freq_t freq)
+esp_err_t ds1338_set_squarewave_freq(i2c_dev_t *dev, ds1338_squarewave_freq_t freq)
 {
     return update_register(dev, CONTROL_REG, SQWEF_MASK, freq);
 }
 
-esp_err_t ds1307_get_squarewave_freq(i2c_dev_t *dev, ds1307_squarewave_freq_t *sqw_freq)
+esp_err_t ds1338_get_squarewave_freq(i2c_dev_t *dev, ds1338_squarewave_freq_t *sqw_freq)
 {
     CHECK_ARG(dev && sqw_freq);
 
@@ -224,7 +224,7 @@ esp_err_t ds1307_get_squarewave_freq(i2c_dev_t *dev, ds1307_squarewave_freq_t *s
     return ESP_OK;
 }
 
-esp_err_t ds1307_get_output(i2c_dev_t *dev, bool *out)
+esp_err_t ds1338_get_output(i2c_dev_t *dev, bool *out)
 {
     CHECK_ARG(dev && out);
 
@@ -239,12 +239,12 @@ esp_err_t ds1307_get_output(i2c_dev_t *dev, bool *out)
     return ESP_OK;
 }
 
-esp_err_t ds1307_set_output(i2c_dev_t *dev, bool value)
+esp_err_t ds1338_set_output(i2c_dev_t *dev, bool value)
 {
     return update_register(dev, CONTROL_REG, OUT_MASK, value ? OUT_BIT : 0);
 }
 
-esp_err_t ds1307_read_ram(i2c_dev_t *dev, uint8_t offset, uint8_t *buf, uint8_t len)
+esp_err_t ds1338_read_ram(i2c_dev_t *dev, uint8_t offset, uint8_t *buf, uint8_t len)
 {
     CHECK_ARG(dev && buf);
 
@@ -258,7 +258,7 @@ esp_err_t ds1307_read_ram(i2c_dev_t *dev, uint8_t offset, uint8_t *buf, uint8_t 
     return ESP_OK;
 }
 
-esp_err_t ds1307_write_ram(i2c_dev_t *dev, uint8_t offset, uint8_t *buf, uint8_t len)
+esp_err_t ds1338_write_ram(i2c_dev_t *dev, uint8_t offset, uint8_t *buf, uint8_t len)
 {
     CHECK_ARG(dev && buf);
 

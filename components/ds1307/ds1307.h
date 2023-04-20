@@ -26,11 +26,11 @@
  */
 
 /**
- * @file ds1307.h
- * @defgroup ds1307 ds1307
+ * @file ds1338.h
+ * @defgroup ds1338 ds1338
  * @{
  *
- * ESP-IDF driver for ds1307 real-time clock
+ * ESP-IDF driver for ds1338 real-time clock
  *
  * Ported from esp-open-rtos
  *
@@ -38,8 +38,8 @@
  *
  * BSD Licensed as described in the file LICENSE
  */
-#ifndef __ds1307_H__
-#define __ds1307_H__
+#ifndef __ds1338_H__
+#define __ds1338_H__
 
 #include <stdbool.h>
 #include <time.h>
@@ -50,18 +50,18 @@
 extern "C" {
 #endif
 
-#define ds1307_ADDR 0x68 //!< I2C address
+#define ds1338_ADDR 0x68 //!< I2C address
 
 /**
  * Squarewave frequency
  */
 typedef enum
 {
-    ds1307_1HZ = 0, //!< 1 Hz
-    ds1307_4096HZ,  //!< 4096 Hz
-    ds1307_8192HZ,  //!< 8192 Hz
-    ds1307_32768HZ  //!< 32768 Hz
-} ds1307_squarewave_freq_t;
+    ds1338_1HZ = 0, //!< 1 Hz
+    ds1338_4096HZ,  //!< 4096 Hz
+    ds1338_8192HZ,  //!< 8192 Hz
+    ds1338_32768HZ  //!< 32768 Hz
+} ds1338_squarewave_freq_t;
 
 typedef struct timeType {
         int	tm_sec;
@@ -83,7 +83,7 @@ typedef struct timeType {
  * @param scl_gpio SCL GPIO
  * @return `ESP_OK` on success
  */
-esp_err_t ds1307_init_desc(i2c_dev_t *dev, i2c_port_t port, gpio_num_t sda_gpio, gpio_num_t scl_gpio);
+esp_err_t ds1338_init_desc(i2c_dev_t *dev, i2c_port_t port, gpio_num_t sda_gpio, gpio_num_t scl_gpio);
 
 /**
  * @brief Free device descriptor
@@ -91,7 +91,7 @@ esp_err_t ds1307_init_desc(i2c_dev_t *dev, i2c_port_t port, gpio_num_t sda_gpio,
  * @param dev Device descriptor
  * @return `ESP_OK` on success
  */
-esp_err_t ds1307_free_desc(i2c_dev_t *dev);
+esp_err_t ds1338_free_desc(i2c_dev_t *dev);
 
 /**
  * @brief Start/stop clock
@@ -100,7 +100,7 @@ esp_err_t ds1307_free_desc(i2c_dev_t *dev);
  * @param start Start clock if true
  * @return `ESP_OK` on success
  */
-esp_err_t ds1307_start(i2c_dev_t *dev, bool start);
+esp_err_t ds1338_start(i2c_dev_t *dev, bool start);
 
 /**
  * @brief Get current clock state
@@ -109,7 +109,7 @@ esp_err_t ds1307_start(i2c_dev_t *dev, bool start);
  * @param[out] running true if clock running
  * @return `ESP_OK` on success
  */
-esp_err_t ds1307_is_running(i2c_dev_t *dev, bool *running);
+esp_err_t ds1338_is_running(i2c_dev_t *dev, bool *running);
 
 /**
  * @brief Get current time
@@ -118,7 +118,7 @@ esp_err_t ds1307_is_running(i2c_dev_t *dev, bool *running);
  * @param[out] time Pointer to the time struct to fill
  * @return `ESP_OK` on success
  */
-esp_err_t ds1307_get_time(i2c_dev_t *dev,  t_time *time);
+esp_err_t ds1338_get_time(i2c_dev_t *dev,  t_time *time);
 
 /**
  * @brief Set time to RTC
@@ -127,7 +127,7 @@ esp_err_t ds1307_get_time(i2c_dev_t *dev,  t_time *time);
  * @param[in] time Pointer to the time struct
  * @return `ESP_OK` on success
  */
-esp_err_t ds1307_set_time(i2c_dev_t *dev, const struct tm *time);
+esp_err_t ds1338_set_time(i2c_dev_t *dev, const struct tm *time);
 
 /**
  * @brief Enable or disable square-wave oscillator output
@@ -136,7 +136,7 @@ esp_err_t ds1307_set_time(i2c_dev_t *dev, const struct tm *time);
  * @param enable Enable oscillator if true
  * @return `ESP_OK` on success
  */
-esp_err_t ds1307_enable_squarewave(i2c_dev_t *dev, bool enable);
+esp_err_t ds1338_enable_squarewave(i2c_dev_t *dev, bool enable);
 
 /**
  * @brief Get square-wave oscillator output
@@ -145,7 +145,7 @@ esp_err_t ds1307_enable_squarewave(i2c_dev_t *dev, bool enable);
  * @param[out] sqw_en true if square-wave oscillator enabled
  * @return `ESP_OK` on success
  */
-esp_err_t ds1307_is_squarewave_enabled(i2c_dev_t *dev, bool *sqw_en);
+esp_err_t ds1338_is_squarewave_enabled(i2c_dev_t *dev, bool *sqw_en);
 
 /**
  * @brief Set square-wave oscillator frequency
@@ -154,7 +154,7 @@ esp_err_t ds1307_is_squarewave_enabled(i2c_dev_t *dev, bool *sqw_en);
  * @param freq Frequency
  * @return `ESP_OK` on success
  */
-esp_err_t ds1307_set_squarewave_freq(i2c_dev_t *dev, ds1307_squarewave_freq_t freq);
+esp_err_t ds1338_set_squarewave_freq(i2c_dev_t *dev, ds1338_squarewave_freq_t freq);
 
 /**
  * @brief Get current square-wave oscillator frequency
@@ -163,7 +163,7 @@ esp_err_t ds1307_set_squarewave_freq(i2c_dev_t *dev, ds1307_squarewave_freq_t fr
  * @param[out] sqw_freq Frequency
  * @return `ESP_OK` on success
  */
-esp_err_t ds1307_get_squarewave_freq(i2c_dev_t *dev, ds1307_squarewave_freq_t *sqw_freq);
+esp_err_t ds1338_get_squarewave_freq(i2c_dev_t *dev, ds1338_squarewave_freq_t *sqw_freq);
 
 /**
  * @brief Get current output level of the SQW/OUT pin
@@ -172,7 +172,7 @@ esp_err_t ds1307_get_squarewave_freq(i2c_dev_t *dev, ds1307_squarewave_freq_t *s
  * @param[out] out current output level of the SQW/OUT pin, true if high
  * @return `ESP_OK` on success
  */
-esp_err_t ds1307_get_output(i2c_dev_t *dev, bool *out);
+esp_err_t ds1338_get_output(i2c_dev_t *dev, bool *out);
 
 /**
  * @brief Set output level of the SQW/OUT pin
@@ -183,7 +183,7 @@ esp_err_t ds1307_get_output(i2c_dev_t *dev, bool *out);
  * @param value High level if true
  * @return `ESP_OK` on success
  */
-esp_err_t ds1307_set_output(i2c_dev_t *dev, bool value);
+esp_err_t ds1338_set_output(i2c_dev_t *dev, bool value);
 
 /**
  * @brief Read RAM contents into the buffer
@@ -194,7 +194,7 @@ esp_err_t ds1307_set_output(i2c_dev_t *dev, bool value);
  * @param len Bytes to read, 1..56
  * @return `ESP_OK` on success
  */
-esp_err_t ds1307_read_ram(i2c_dev_t *dev, uint8_t offset, uint8_t *buf, uint8_t len);
+esp_err_t ds1338_read_ram(i2c_dev_t *dev, uint8_t offset, uint8_t *buf, uint8_t len);
 
 /**
  * @brief Write buffer to RTC RAM
@@ -205,7 +205,7 @@ esp_err_t ds1307_read_ram(i2c_dev_t *dev, uint8_t offset, uint8_t *buf, uint8_t 
  * @param len Bytes to write, 1..56
  * @return `ESP_OK` on success
  */
-esp_err_t ds1307_write_ram(i2c_dev_t *dev, uint8_t offset, uint8_t *buf, uint8_t len);
+esp_err_t ds1338_write_ram(i2c_dev_t *dev, uint8_t offset, uint8_t *buf, uint8_t len);
 
 
 #ifdef __cplusplus
@@ -214,4 +214,4 @@ esp_err_t ds1307_write_ram(i2c_dev_t *dev, uint8_t offset, uint8_t *buf, uint8_t
 
 /**@}*/
 
-#endif /* __ds1307_H__ */
+#endif /* __ds1338_H__ */
