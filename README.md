@@ -1,6 +1,7 @@
 # _DS1338 COMPONENT_
 This component is based on DS1307 component developed by Ruslan V.
 The original component can be accessed through the link below:
+
 	https://github.com/UncleRus/esp-idf-lib
 	
 This particular repository is a complete example project with the modified component to control DS1338.
