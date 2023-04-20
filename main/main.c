@@ -1,4 +1,4 @@
-//Example developed by Josias D. Martins - Bobsien Channel (youtube.com/Bobsien)
+//Example developed by Martins J. - Bobsien Channel (youtube.com/Bobsien)
 
 
 #include <stdio.h>

@@ -9,8 +9,11 @@ Some minor modifications were made regarding functions like functions renaming, 
 ## How to use this example
 
 1 - Create a new project
+
 2 - Copy the component folder
+
 3 - Copy the main.c file
+
 
 ## More informations
 

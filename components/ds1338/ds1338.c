@@ -1,5 +1,7 @@
 /*
- * Copyright (c) 2016 Ruslan V. Uss <unclerus@gmail.com>
+ * Copyright (c) 2016 Ruslan V. Uss <unclerus@gmail.com> and 2023 Martins J. <josias@bobsien.com.br>
+ *
+ * This is a modified version of the DS1307 component to control the DS1338 RTC
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
