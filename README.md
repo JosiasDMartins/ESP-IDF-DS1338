@@ -18,5 +18,6 @@ Some minor modifications were made regarding functions like functions renaming, 
 ## More informations
 
 For more information about the functions, see the original DS1307 documentation in the link below:
+
 	https://esp-idf-lib.readthedocs.io/en/latest/groups/ds1307.html
 
