@@ -16,7 +16,7 @@
 #include <sys/time.h>
 #include "esp_sntp.h" 
 
-#include <ds1307.h>
+#include <ds1338.h>
 
 
 
