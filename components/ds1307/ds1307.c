@@ -28,7 +28,7 @@
 /**
  * @file ds1307.c
  *
- * ESP-IDF driver for DS1307 real-time clock
+ * ESP-IDF driver for ds1307 real-time clock
  *
  * Ported from esp-open-rtos
  *
@@ -40,7 +40,7 @@
 #include <esp_idf_lib_helpers.h>
 #include "ds1307.h"
 
-#define I2C_FREQ_HZ 400000
+#define I2C_FREQ_HZ 100000
 
 #define RAM_SIZE 56
 
@@ -94,12 +94,13 @@ esp_err_t ds1307_init_desc(i2c_dev_t *dev, i2c_port_t port, gpio_num_t sda_gpio,
     CHECK_ARG(dev);
 
     dev->port = port;
-    dev->addr = DS1307_ADDR;
+    dev->addr = 0x68;
     dev->cfg.sda_io_num = sda_gpio;
     dev->cfg.scl_io_num = scl_gpio;
 #if HELPER_TARGET_IS_ESP32
     dev->cfg.master.clk_speed = I2C_FREQ_HZ;
 #endif
+
     return i2c_dev_create_mutex(dev);
 }
 
@@ -130,7 +131,7 @@ esp_err_t ds1307_is_running(i2c_dev_t *dev, bool *running)
     return ESP_OK;
 }
 
-esp_err_t ds1307_get_time(i2c_dev_t *dev, struct tm *time)
+esp_err_t ds1307_get_time(i2c_dev_t *dev,  t_time *time)
 {
     CHECK_ARG(dev && time);
 
@@ -139,22 +140,25 @@ esp_err_t ds1307_get_time(i2c_dev_t *dev, struct tm *time)
     I2C_DEV_TAKE_MUTEX(dev);
     I2C_DEV_CHECK(dev, i2c_dev_read_reg(dev, TIME_REG, buf, 7));
     I2C_DEV_GIVE_MUTEX(dev);
+    //printf("RTC1338z i2c Frequency: %d\n", dev->cfg.master.clk_speed );
 
     time->tm_sec = bcd2dec(buf[0] & SECONDS_MASK);
     time->tm_min = bcd2dec(buf[1]);
-    if (buf[2] & HOUR12_BIT)
+    
+   if (buf[2] & HOUR12_BIT)
     {
         // RTC in 12-hour mode
-        time->tm_hour = bcd2dec(buf[2] & HOUR12_MASK) - 1;
+         time->tm_hour = bcd2dec(buf[2] & HOUR12_MASK); //time->tm_hour = bcd2dec(buf[2] & HOUR12_MASK) - 1;
         if (buf[2] & PM_BIT)
             time->tm_hour += 12;
     }
-    else
+    else{
         time->tm_hour = bcd2dec(buf[2] & HOUR24_MASK);
-    time->tm_wday = bcd2dec(buf[3]) - 1;
+    }
+    time->tm_wday = bcd2dec(buf[3]); //time->tm_wday = bcd2dec(buf[3]) - 1;
     time->tm_mday = bcd2dec(buf[4]);
-    time->tm_mon  = bcd2dec(buf[5]) - 1;
-    time->tm_year = bcd2dec(buf[6]) + 100;
+    time->tm_mon  = bcd2dec(buf[5]); //time->tm_mon  = bcd2dec(buf[5]) - 1;
+    time->tm_year = bcd2dec(buf[6])  + 1900;
 
     return ESP_OK;
 }
@@ -167,10 +171,10 @@ esp_err_t ds1307_set_time(i2c_dev_t *dev, const struct tm *time)
         dec2bcd(time->tm_sec),
         dec2bcd(time->tm_min),
         dec2bcd(time->tm_hour),
-        dec2bcd(time->tm_wday + 1),
+        dec2bcd(time->tm_wday), //dec2bcd(time->tm_wday + 1),
         dec2bcd(time->tm_mday),
-        dec2bcd(time->tm_mon + 1),
-        dec2bcd(time->tm_year - 100)
+        dec2bcd(time->tm_mon+1), //dec2bcd(time->tm_mon + 1),
+        dec2bcd(time->tm_year) // dec2bcd(time->tm_year - 100) // adicionado -33 para correção em relação ao SNTP
     };
 
     I2C_DEV_TAKE_MUTEX(dev);

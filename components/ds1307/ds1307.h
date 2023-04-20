@@ -30,7 +30,7 @@
  * @defgroup ds1307 ds1307
  * @{
  *
- * ESP-IDF driver for DS1307 real-time clock
+ * ESP-IDF driver for ds1307 real-time clock
  *
  * Ported from esp-open-rtos
  *
@@ -38,8 +38,8 @@
  *
  * BSD Licensed as described in the file LICENSE
  */
-#ifndef __DS1307_H__
-#define __DS1307_H__
+#ifndef __ds1307_H__
+#define __ds1307_H__
 
 #include <stdbool.h>
 #include <time.h>
@@ -50,19 +50,30 @@
 extern "C" {
 #endif
 
-#define DS1307_ADDR 0x68 //!< I2C address
+#define ds1307_ADDR 0x68 //!< I2C address
 
 /**
  * Squarewave frequency
  */
 typedef enum
 {
-    DS1307_1HZ = 0, //!< 1 Hz
-    DS1307_4096HZ,  //!< 4096 Hz
-    DS1307_8192HZ,  //!< 8192 Hz
-    DS1307_32768HZ  //!< 32768 Hz
+    ds1307_1HZ = 0, //!< 1 Hz
+    ds1307_4096HZ,  //!< 4096 Hz
+    ds1307_8192HZ,  //!< 8192 Hz
+    ds1307_32768HZ  //!< 32768 Hz
 } ds1307_squarewave_freq_t;
 
+typedef struct timeType {
+        int	tm_sec;
+        int	tm_min;
+        int	tm_hour;
+        int	tm_mday;
+        int	tm_mon;
+        int	tm_year;
+        int	tm_wday;
+        int	tm_yday;
+        int	tm_isdst;        
+} t_time;
 /**
  * @brief Initialize device descriptor
  *
@@ -107,7 +118,7 @@ esp_err_t ds1307_is_running(i2c_dev_t *dev, bool *running);
  * @param[out] time Pointer to the time struct to fill
  * @return `ESP_OK` on success
  */
-esp_err_t ds1307_get_time(i2c_dev_t *dev, struct tm *time);
+esp_err_t ds1307_get_time(i2c_dev_t *dev,  t_time *time);
 
 /**
  * @brief Set time to RTC
@@ -203,4 +214,4 @@ esp_err_t ds1307_write_ram(i2c_dev_t *dev, uint8_t offset, uint8_t *buf, uint8_t
 
 /**@}*/
 
-#endif /* __DS1307_H__ */
+#endif /* __ds1307_H__ */
